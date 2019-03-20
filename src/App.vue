@@ -144,6 +144,25 @@
                     this.teamTopScorer(this.openedTeam)
                 })
             },
+            async loadFixtures() {
+
+                // await axios.get('https://allsportsapi.com/api/football/', {
+                //     params: {
+                //         met: 'Fixtures',
+                //         from: '2018-06-01&to=2019-06-01',
+                //         APIkey: this.apiKey
+                //     }
+                // }).then(response => {
+                //     console.log(response)
+                //     // this.openedTeam = response.data
+                //     // this.teamTopScorer(this.openedTeam)
+                // })
+                await axios.get('https://allsportsapi.com/api/football/?met=Fixtures&APIkey=5b6339a51368e998ca64d8eea1032bd7fe1095678c5e49ae41c19247e9893548&from=2018-05-23&to=2019-03-10').then(response => {
+                    console.log(response)
+                    // this.openedTeam = response.data
+                    // this.teamTopScorer(this.openedTeam)
+                })
+            },
             showTeamInfoMenu(action) {
                 this.selectedMenu = action
             },
@@ -163,6 +182,7 @@
         },
         beforeMount() {
             this.premearLeague()
+            this.loadFixtures()
         },
 
     }
