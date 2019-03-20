@@ -15,7 +15,8 @@
                 <div v-for="item in sport">
                     <ul v-for="team in item.total" class="list-reset flex flex-col">
                         <li @click="showTeamInfo(team.team_key)" class="text-white w-full pt-2 pb-2">
-                            <a class="w-full flex"><span class="w-10 mr-1">{{team.standing_place}}.</span><span class="w-32 mr-2">{{team.standing_team}}</span><span
+                            <a class="w-full flex"><span class="w-10 mr-1">{{team.standing_place}}.</span><span
+                                    class="w-32 mr-2">{{team.standing_team}}</span><span
                                     class="w-10">{{team.standing_PTS}}</span></a>
                         </li>
                     </ul>
@@ -33,74 +34,48 @@
                            @click="showTeamInfoMenu(menu.action)">
                             {{menu.menu}}
                         </a>
-
-                        <!--<a class="text-white text-center uppercase w-1/3 hover:bg-green py-2 cursor-pointer">Players</a>-->
-                        <!--<a class="text-white text-center uppercase w-1/3 hover:bg-green py-2 cursor-pointer">Fixture</a>-->
-                        <!--<a class="text-white text-center uppercase w-1/3 hover:bg-green py-2 cursor-pointer">Top performance</a>-->
                     </div>
                     <div>
-                        <div class="flex justify-between">
-                            <div>Pos</div>
-                            <div>Number</div>
-                            <div>Player</div>
-                            <div>Played</div>
-                            <div>Red</div>
-                            <div>Yellow</div>
-                            <div>Goals</div>
-                            <div>Assists</div>
-                        </div>
+
                         <div v-if="selectedMenu === 'players'">
-                            <div v-for="player in team.players" >
-                                <div class="flex justify-between">
-                                    <div v-if="player.player_type === 'Goalkeepers'">GK</div>
-                                    <div v-if="player.player_type === 'Defenders'">DF</div>
-                                    <div v-if="player.player_type === 'Midfielders'">MD</div>
-                                    <div v-if="player.player_type === 'Forwards'">FW</div>
-
-                                        <div>{{player.player_number}}</div>
-                                        <div>{{player.player_red_cards}}</div>
-                                        <div>{{player.player_yellow_cards}}</div>
-                                        <div>{{player.player_name}}</div>
-                                        <div>{{player.player_match_played}}</div>
-                                        <div>{{player.player_country}}</div>
-                                        <div>{{player.player_goals}}</div>
+                            <h2 class="text-purple-darkest my-4">Goalkeepers</h2>
+                            <div class="flex flex-wrap items-center">
+                                <div v-for="player in team.players"
+                                     v-if="player.player_type === 'Goalkeepers'"
+                                     class="text-black flex mr-4 h-6 bg-white flex items-center justify-center mb-2 h-full">
+                                    <div class="flex items-center">
+                                        <span class="text-green bg-purple-darkest py-2 w-10 text-center">{{player.player_number}}</span>
+                                        <span class="p-2"> {{player.player_name}}</span>
+                                    </div>
                                 </div>
-
                             </div>
-
-
-                            <!--<h2 class="text-purple-darkest my-4">Goalkeepers</h2>-->
-                            <!--<div class="flex flex-wrap items-center">-->
-                            <!--<div v-for="player in team.players"-->
-                            <!--v-if="player.player_type === 'Goalkeepers'"-->
-                            <!--class="text-black flex mr-4 h-6 bg-white flex items-center justify-center p-2 mb-2">-->
-                            <!--<span> {{player.player_name}}</span>-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--<h2 class="text-purple-darkest my-4">Defenders</h2>-->
-                            <!--<div class="flex flex-wrap">-->
-                            <!--<div v-for="player in team.players"-->
-                            <!--v-if="player.player_type === 'Defenders'"-->
-                            <!--class="text-black flex mr-4 h-6 bg-white flex items-center justify-center p-2 mb-2">-->
-                            <!--{{player.player_name}}-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--<h2 class="text-purple-darkest my-4">Midfielders</h2>-->
-                            <!--<div class="flex flex-wrap">-->
-                            <!--<div v-for="player in team.players"-->
-                            <!--v-if="player.player_type === 'Midfielders'"-->
-                            <!--class="text-black flex mr-4 h-6 bg-white flex items-center justify-center p-2 mb-2">-->
-                            <!--{{player.player_name}}-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--<h2 class="text-purple-darkest my-4">Forwards</h2>-->
-                            <!--<div class="flex flex-wrap">-->
-                            <!--<div v-for="player in team.players"-->
-                            <!--v-if="player.player_type === 'Forwards'"-->
-                            <!--class="text-black flex mr-4 h-6 bg-white flex items-center justify-center p-2 mb-2">-->
-                            <!--{{player.player_name}}-->
-                            <!--</div>-->
-                            <!--</div>-->
+                            <h2 class="text-purple-darkest my-4">Defenders</h2>
+                            <div class="flex flex-wrap">
+                                <div v-for="player in team.players"
+                                     v-if="player.player_type === 'Defenders'"
+                                     class="text-black flex mr-4 h-6 bg-white flex items-center justify-center mb-2 h-full">
+                                    <span class="text-green bg-purple-darkest py-2 w-10 text-center">{{player.player_number}}</span>
+                                    <span class="p-2"> {{player.player_name}}</span>
+                                </div>
+                            </div>
+                            <h2 class="text-purple-darkest my-4">Midfielders</h2>
+                            <div class="flex flex-wrap">
+                                <div v-for="player in team.players"
+                                     v-if="player.player_type === 'Midfielders'"
+                                     class="text-black flex mr-4 h-6 bg-white flex items-center justify-center mb-2 h-full">
+                                    <span class="text-green bg-purple-darkest py-2 w-10 text-center">{{player.player_number}}</span>
+                                    <span class="p-2"> {{player.player_name}}</span>
+                                </div>
+                            </div>
+                            <h2 class="text-purple-darkest my-4">Forwards</h2>
+                            <div class="flex flex-wrap">
+                                <div v-for="player in team.players"
+                                     v-if="player.player_type === 'Forwards'"
+                                     class="text-black flex mr-4 h-6 bg-white flex items-center justify-center mb-2 h-full">
+                                    <span class="text-green bg-purple-darkest py-2 w-10 text-center">{{player.player_number}}</span>
+                                    <span class="p-2"> {{player.player_name}}</span>
+                                </div>
+                            </div>
                         </div>
                         <div v-if="selectedMenu === 'performance'">
                             <div v-for="goals in mostGoals">
@@ -120,77 +95,77 @@
     <!--<router-view/>-->
 </template>
 <script>
-  import axios from 'axios';
-  import '@/assets/css/tailwind.css'
-  // import teamSquad from 'components/TeamSquad'
+    import axios from 'axios';
+    import '@/assets/css/tailwind.css'
+    // import teamSquad from 'components/TeamSquad'
 
-  export default {
-    data () {
-      return {
-        sport: [],
-        apiKey: '5b6339a51368e998ca64d8eea1032bd7fe1095678c5e49ae41c19247e9893548',
-        openedTeam: [],
-        allTeams: [],
-        teamsMenu: [
-          {menu: 'players', action: 'players'},
-          {menu: 'fixture', action: 'fixture'},
-          {menu: 'Top performance', action: 'performance'},
-        ],
-        selectedMenu: 'players',
-        mostGoals: []
-      }
-    },
-    component: {
-      // teamSquad
-    },
-    computed: {},
-    methods: {
-      async premearLeague () {
-        await axios.get(`https://allsportsapi.com/api/football/?&met=Standings&leagueId=148&APIkey=${this.apiKey}`).then(response => {
-          this.sport = response.data
-          for (let i = 0; i < this.sport.result.total.length; i++) {
-            this.allTeams.push(this.sport.result.total[i].team_key)
-          }
-          this.EnglandTeams()
-        })
-      },
-      EnglandTeams () {
+    export default {
+        data() {
+            return {
+                sport: [],
+                apiKey: '5b6339a51368e998ca64d8eea1032bd7fe1095678c5e49ae41c19247e9893548',
+                openedTeam: [],
+                allTeams: [],
+                teamsMenu: [
+                    {menu: 'players', action: 'players'},
+                    {menu: 'fixture', action: 'fixture'},
+                    {menu: 'Top performance', action: 'performance'},
+                ],
+                selectedMenu: 'players',
+                mostGoals: []
+            }
+        },
+        component: {
+            // teamSquad
+        },
+        computed: {},
+        methods: {
+            async premearLeague() {
+                await axios.get(`https://allsportsapi.com/api/football/?&met=Standings&leagueId=148&APIkey=${this.apiKey}`).then(response => {
+                    this.sport = response.data
+                    for (let i = 0; i < this.sport.result.total.length; i++) {
+                        this.allTeams.push(this.sport.result.total[i].team_key)
+                    }
+                    this.EnglandTeams()
+                })
+            },
+            EnglandTeams() {
 
-      },
-      async showTeamInfo (team) {
-        await axios.get('https://allsportsapi.com/api/football/', {
-          params: {
-            met: 'Teams',
-            teamId: team,
-            APIkey: this.apiKey
-          }
-        }).then(response => {
-          this.openedTeam = response.data
-          this.teamTopScorer(this.openedTeam)
-        })
-      },
-      showTeamInfoMenu (action) {
-        this.selectedMenu = action
-      },
-      teamTopScorer (team) {
-        this.mostGoals = []
-        team.result.forEach(item => {
-          item.players.forEach(topScore => {
-            // console.log(Object.entries(topScore.player_goals))
-            // console.log(topScore.player_goals)
-            // this.mostGoals.push({goals:topScore.player_goals,name:topScore.player_name})
-            // console.log(this.mostGoals)
-          })
-        })
+            },
+            async showTeamInfo(team) {
+                await axios.get('https://allsportsapi.com/api/football/', {
+                    params: {
+                        met: 'Teams',
+                        teamId: team,
+                        APIkey: this.apiKey
+                    }
+                }).then(response => {
+                    this.openedTeam = response.data
+                    this.teamTopScorer(this.openedTeam)
+                })
+            },
+            showTeamInfoMenu(action) {
+                this.selectedMenu = action
+            },
+            teamTopScorer(team) {
+                this.mostGoals = []
+                team.result.forEach(item => {
+                    item.players.forEach(topScore => {
+                        // console.log(Object.entries(topScore.player_goals))
+                        // console.log(topScore.player_goals)
+                        // this.mostGoals.push({goals:topScore.player_goals,name:topScore.player_name})
+                        // console.log(this.mostGoals)
+                    })
+                })
 
-      },
+            },
 
-    },
-    beforeMount () {
-      this.premearLeague()
-    },
+        },
+        beforeMount() {
+            this.premearLeague()
+        },
 
-  }
+    }
 
 </script>
 
@@ -199,4 +174,3 @@
         top: -65px;
     }
 </style>
-
