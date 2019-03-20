@@ -39,39 +39,68 @@
                         <!--<a class="text-white text-center uppercase w-1/3 hover:bg-green py-2 cursor-pointer">Top performance</a>-->
                     </div>
                     <div>
+                        <div class="flex justify-between">
+                            <div>Pos</div>
+                            <div>Number</div>
+                            <div>Player</div>
+                            <div>Played</div>
+                            <div>Red</div>
+                            <div>Yellow</div>
+                            <div>Goals</div>
+                            <div>Assists</div>
+                        </div>
                         <div v-if="selectedMenu === 'players'">
-                            <h2 class="text-purple-darkest my-4">Goalkeepers</h2>
-                            <div class="flex flex-wrap items-center">
-                                <div v-for="player in team.players"
-                                     v-if="player.player_type === 'Goalkeepers'"
-                                     class="text-black flex mr-4 h-6 bg-white flex items-center justify-center p-2 mb-2">
-                                    <span> {{player.player_name}}</span>
+                            <div v-for="player in team.players" >
+                                <div class="flex justify-between">
+                                    <div v-if="player.player_type === 'Goalkeepers'">GK</div>
+                                    <div v-if="player.player_type === 'Defenders'">DF</div>
+                                    <div v-if="player.player_type === 'Midfielders'">MD</div>
+                                    <div v-if="player.player_type === 'Forwards'">FW</div>
+
+                                        <div>{{player.player_number}}</div>
+                                        <div>{{player.player_red_cards}}</div>
+                                        <div>{{player.player_yellow_cards}}</div>
+                                        <div>{{player.player_name}}</div>
+                                        <div>{{player.player_match_played}}</div>
+                                        <div>{{player.player_country}}</div>
+                                        <div>{{player.player_goals}}</div>
                                 </div>
+
                             </div>
-                            <h2 class="text-purple-darkest my-4">Defenders</h2>
-                            <div class="flex flex-wrap">
-                                <div v-for="player in team.players"
-                                     v-if="player.player_type === 'Defenders'"
-                                     class="text-black flex mr-4 h-6 bg-white flex items-center justify-center p-2 mb-2">
-                                    {{player.player_name}}
-                                </div>
-                            </div>
-                            <h2 class="text-purple-darkest my-4">Midfielders</h2>
-                            <div class="flex flex-wrap">
-                                <div v-for="player in team.players"
-                                     v-if="player.player_type === 'Midfielders'"
-                                     class="text-black flex mr-4 h-6 bg-white flex items-center justify-center p-2 mb-2">
-                                    {{player.player_name}}
-                                </div>
-                            </div>
-                            <h2 class="text-purple-darkest my-4">Forwards</h2>
-                            <div class="flex flex-wrap">
-                                <div v-for="player in team.players"
-                                     v-if="player.player_type === 'Forwards'"
-                                     class="text-black flex mr-4 h-6 bg-white flex items-center justify-center p-2 mb-2">
-                                    {{player.player_name}}
-                                </div>
-                            </div>
+
+
+                            <!--<h2 class="text-purple-darkest my-4">Goalkeepers</h2>-->
+                            <!--<div class="flex flex-wrap items-center">-->
+                            <!--<div v-for="player in team.players"-->
+                            <!--v-if="player.player_type === 'Goalkeepers'"-->
+                            <!--class="text-black flex mr-4 h-6 bg-white flex items-center justify-center p-2 mb-2">-->
+                            <!--<span> {{player.player_name}}</span>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<h2 class="text-purple-darkest my-4">Defenders</h2>-->
+                            <!--<div class="flex flex-wrap">-->
+                            <!--<div v-for="player in team.players"-->
+                            <!--v-if="player.player_type === 'Defenders'"-->
+                            <!--class="text-black flex mr-4 h-6 bg-white flex items-center justify-center p-2 mb-2">-->
+                            <!--{{player.player_name}}-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<h2 class="text-purple-darkest my-4">Midfielders</h2>-->
+                            <!--<div class="flex flex-wrap">-->
+                            <!--<div v-for="player in team.players"-->
+                            <!--v-if="player.player_type === 'Midfielders'"-->
+                            <!--class="text-black flex mr-4 h-6 bg-white flex items-center justify-center p-2 mb-2">-->
+                            <!--{{player.player_name}}-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<h2 class="text-purple-darkest my-4">Forwards</h2>-->
+                            <!--<div class="flex flex-wrap">-->
+                            <!--<div v-for="player in team.players"-->
+                            <!--v-if="player.player_type === 'Forwards'"-->
+                            <!--class="text-black flex mr-4 h-6 bg-white flex items-center justify-center p-2 mb-2">-->
+                            <!--{{player.player_name}}-->
+                            <!--</div>-->
+                            <!--</div>-->
                         </div>
                         <div v-if="selectedMenu === 'performance'">
                             <div v-for="goals in mostGoals">
@@ -146,11 +175,12 @@
       teamTopScorer (team) {
         this.mostGoals = []
         team.result.forEach(item => {
-          // item.players.forEach(topScore => {
-          //   console.log(topScore)
-          //   // this.mostGoals.push({goals:topScore.player_goals,name:topScore.player_name})
-          //   // console.log(this.mostGoals)
-          // })
+          item.players.forEach(topScore => {
+            // console.log(Object.entries(topScore.player_goals))
+            // console.log(topScore.player_goals)
+            // this.mostGoals.push({goals:topScore.player_goals,name:topScore.player_name})
+            // console.log(this.mostGoals)
+          })
         })
 
       },
