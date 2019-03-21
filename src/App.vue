@@ -38,44 +38,10 @@
                     <div>
 
                         <div v-if="selectedMenu === 'players'">
-                            <h2 class="text-purple-darkest my-4">Goalkeepers</h2>
-                            <div class="flex flex-wrap items-center">
-                                <div v-for="player in team.players"
-                                     v-if="player.player_type === 'Goalkeepers'"
-                                     class="text-black flex mr-4 h-6 bg-white flex items-center justify-center mb-2 h-full">
-                                    <div class="flex items-center">
-                                        <span class="text-green bg-purple-darkest py-2 w-10 text-center">{{player.player_number}}</span>
-                                        <span class="p-2"> {{player.player_name}}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <h2 class="text-purple-darkest my-4">Defenders</h2>
-                            <div class="flex flex-wrap">
-                                <div v-for="player in team.players"
-                                     v-if="player.player_type === 'Defenders'"
-                                     class="text-black flex mr-4 h-6 bg-white flex items-center justify-center mb-2 h-full">
-                                    <span class="text-green bg-purple-darkest py-2 w-10 text-center">{{player.player_number}}</span>
-                                    <span class="p-2"> {{player.player_name}}</span>
-                                </div>
-                            </div>
-                            <h2 class="text-purple-darkest my-4">Midfielders</h2>
-                            <div class="flex flex-wrap">
-                                <div v-for="player in team.players"
-                                     v-if="player.player_type === 'Midfielders'"
-                                     class="text-black flex mr-4 h-6 bg-white flex items-center justify-center mb-2 h-full">
-                                    <span class="text-green bg-purple-darkest py-2 w-10 text-center">{{player.player_number}}</span>
-                                    <span class="p-2"> {{player.player_name}}</span>
-                                </div>
-                            </div>
-                            <h2 class="text-purple-darkest my-4">Forwards</h2>
-                            <div class="flex flex-wrap">
-                                <div v-for="player in team.players"
-                                     v-if="player.player_type === 'Forwards'"
-                                     class="text-black flex mr-4 h-6 bg-white flex items-center justify-center mb-2 h-full">
-                                    <span class="text-green bg-purple-darkest py-2 w-10 text-center">{{player.player_number}}</span>
-                                    <span class="p-2"> {{player.player_name}}</span>
-                                </div>
-                            </div>
+                            <TeamSquad :team="team"/>
+                        </div>
+                        <div v-if="selectedMenu === 'fixture'" class="overflow-y-scroll h-70 mt-10">
+                            <Fixture :teamPlayed="teamPlayed"/>
                         </div>
                         <div v-if="selectedMenu === 'performance'">
                             <div v-for="goals in mostGoals">
@@ -88,6 +54,7 @@
                 </div>
             </div>
         </div>
+
         <!--<teamSquad/>-->
         <!--<router-link to="/">Home</router-link> |-->
         <!--<router-link to="/about">About</router-link>-->
@@ -95,97 +62,109 @@
     <!--<router-view/>-->
 </template>
 <script>
-    import axios from 'axios';
-    import '@/assets/css/tailwind.css'
-    // import teamSquad from 'components/TeamSquad'
+  import axios from 'axios';
+  import '@/assets/css/tailwind.css'
+  import TeamSquad from '@/components/TeamSquad'
+  import Fixture from '@/components/Fixture'
 
-    export default {
-        data() {
-            return {
-                sport: [],
-                apiKey: '5b6339a51368e998ca64d8eea1032bd7fe1095678c5e49ae41c19247e9893548',
-                openedTeam: [],
-                allTeams: [],
-                teamsMenu: [
-                    {menu: 'players', action: 'players'},
-                    {menu: 'fixture', action: 'fixture'},
-                    {menu: 'Top performance', action: 'performance'},
-                ],
-                selectedMenu: 'players',
-                mostGoals: []
+  export default {
+    data () {
+      return {
+        sport: [],
+        apiKey: '5b6339a51368e998ca64d8eea1032bd7fe1095678c5e49ae41c19247e9893548',
+        openedTeam: [],
+        allTeams: [],
+        teamsMenu: [
+          {menu: 'players', action: 'players'},
+          {menu: 'fixture', action: 'fixture'},
+          {menu: 'Top performance', action: 'performance'},
+        ],
+        selectedMenu: 'players',
+        mostGoals: [],
+        allFixtures: [],
+        teamPlayed: [],
+      }
+    },
+    components: {
+      TeamSquad,
+      Fixture
+    },
+    computed: {},
+    methods: {
+      async premearLeague () {
+        await axios.get(`https://allsportsapi.com/api/football/?&met=Standings&leagueId=148&APIkey=${this.apiKey}`).then(response => {
+          this.sport = response.data
+          for (let i = 0; i < this.sport.result.total.length; i++) {
+            this.allTeams.push(this.sport.result.total[i].team_key)
+          }
+          this.EnglandTeams()
+        })
+      },
+      EnglandTeams () {
+
+      },
+      async showTeamInfo (team) {
+        await axios.get('https://allsportsapi.com/api/football/', {
+          params: {
+            met: 'Teams',
+            teamId: team,
+            APIkey: this.apiKey
+          }
+        }).then(response => {
+          this.openedTeam = response.data
+          this.teamTopScorer(this.openedTeam)
+          this.teamFixtures(this.openedTeam.result[0].team_key)
+
+        })
+      },
+      async loadFixtures () {
+        await axios.get('https://allsportsapi.com/api/football/', {
+          params: {
+            met: 'Fixtures',
+            from: '2018-06-01',
+            to: '2019-06-01',
+            APIkey: this.apiKey,
+            leagueId: '148'
+          }
+        }).then(response => {
+          this.allFixtures.push(response.data.result)
+        })
+      },
+      showTeamInfoMenu (action) {
+        this.selectedMenu = action
+        if (this.selectedMenu === 'fixture') {
+        }
+      },
+      teamTopScorer (team) {
+        this.mostGoals = []
+        team.result.forEach(item => {
+          item.players.forEach(topScore => {
+            // console.log(Object.entries(topScore.player_goals))
+            // console.log(topScore.player_goals)
+            // this.mostGoals.push({goals:topScore.player_goals,name:topScore.player_name})
+            // console.log(this.mostGoals)
+          })
+        })
+
+      },
+      teamFixtures (teamId) {
+        this.teamPlayed = []
+        this.allFixtures.forEach( item => {
+          item.forEach( fixture => {
+            if (fixture.away_team_key === teamId || fixture.home_team_key === teamId) {
+              this.teamPlayed.push(fixture)
             }
-        },
-        component: {
-            // teamSquad
-        },
-        computed: {},
-        methods: {
-            async premearLeague() {
-                await axios.get(`https://allsportsapi.com/api/football/?&met=Standings&leagueId=148&APIkey=${this.apiKey}`).then(response => {
-                    this.sport = response.data
-                    for (let i = 0; i < this.sport.result.total.length; i++) {
-                        this.allTeams.push(this.sport.result.total[i].team_key)
-                    }
-                    this.EnglandTeams()
-                })
-            },
-            EnglandTeams() {
+          })
+        })
+      }
 
-            },
-            async showTeamInfo(team) {
-                await axios.get('https://allsportsapi.com/api/football/', {
-                    params: {
-                        met: 'Teams',
-                        teamId: team,
-                        APIkey: this.apiKey
-                    }
-                }).then(response => {
-                    this.openedTeam = response.data
-                    this.teamTopScorer(this.openedTeam)
-                })
-            },
-            async loadFixtures() {
+    },
+    beforeMount () {
+      this.premearLeague()
+      this.loadFixtures()
+    },
 
-                // await axios.get('https://allsportsapi.com/api/football/', {
-                //     params: {
-                //         met: 'Fixtures',
-                //         from: '2018-06-01&to=2019-06-01',
-                //         APIkey: this.apiKey
-                //     }
-                // }).then(response => {
-                //     console.log(response)
-                //     // this.openedTeam = response.data
-                //     // this.teamTopScorer(this.openedTeam)
-                // })
-                await axios.get('https://allsportsapi.com/api/football/?met=Fixtures&APIkey=5b6339a51368e998ca64d8eea1032bd7fe1095678c5e49ae41c19247e9893548&from=2018-05-23&to=2019-03-10').then(response => {
-                    console.log(response)
-                    // this.openedTeam = response.data
-                    // this.teamTopScorer(this.openedTeam)
-                })
-            },
-            showTeamInfoMenu(action) {
-                this.selectedMenu = action
-            },
-            teamTopScorer(team) {
-                this.mostGoals = []
-                team.result.forEach(item => {
-                    item.players.forEach(topScore => {
-                        // console.log(Object.entries(topScore.player_goals))
-                        // console.log(topScore.player_goals)
-                        // this.mostGoals.push({goals:topScore.player_goals,name:topScore.player_name})
-                        // console.log(this.mostGoals)
-                    })
-                })
-
-            },
-
-        },
-        beforeMount() {
-            this.premearLeague()
-            this.loadFixtures()
-        },
-
-    }
+  }
 
 </script>
 
