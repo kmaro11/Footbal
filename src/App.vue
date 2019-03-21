@@ -44,9 +44,8 @@
                             <Fixture :teamPlayed="teamPlayed"/>
                         </div>
                         <div v-if="selectedMenu === 'performance'">
-                            <div v-for="goals in mostGoals">
-                                {{goals.name}}
-                                {{goals.goals}}
+                            <div v-for="stats in statistics">
+
                             </div>
 
                         </div>
@@ -80,7 +79,7 @@
           {menu: 'Top performance', action: 'performance'},
         ],
         selectedMenu: 'players',
-        mostGoals: [],
+        statistics: [],
         allFixtures: [],
         teamPlayed: [],
       }
@@ -112,7 +111,7 @@
           }
         }).then(response => {
           this.openedTeam = response.data
-          this.teamTopScorer(this.openedTeam)
+          this.teamTopPerformances(this.openedTeam.result[0].players)
           this.teamFixtures(this.openedTeam.result[0].team_key)
 
         })
@@ -135,18 +134,26 @@
         if (this.selectedMenu === 'fixture') {
         }
       },
-      teamTopScorer (team) {
-        this.mostGoals = []
-        team.result.forEach(item => {
-          item.players.forEach(topScore => {
-            // console.log(Object.entries(topScore.player_goals))
-            // console.log(topScore.player_goals)
-            // this.mostGoals.push({goals:topScore.player_goals,name:topScore.player_name})
-            // console.log(this.mostGoals)
-          })
-        })
+      teamTopPerformances (team) {
+        let allPlayersStats = []
+        team.forEach( players => {
+          console.log(players)
+          allPlayersStats.push(players)
 
+        })
+        // this.teamTopScorer (allPlayersStats)
+        // this.teamTopRedCards (allPlayersStats)
+        // this.topYellowCards (allPlayersStats)
       },
+      // teamTopScorer (goals) {
+      //   console.log(goals.player_country)
+      // },
+      // teamTopRedCards (redCards) {
+      //
+      // },
+      // topYellowCards (yellowCards) {
+      //
+      // },
       teamFixtures (teamId) {
         this.teamPlayed = []
         this.allFixtures.forEach( item => {
