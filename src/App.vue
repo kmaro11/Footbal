@@ -44,10 +44,14 @@
                             <Fixture :teamPlayed="teamPlayed"/>
                         </div>
                         <div v-if="selectedMenu === 'performance'">
-                            <div v-for="stats in statistics">
-
+                            <div>
+                                <div v-for="menu in sidebarMenuStatus">
+                                    <div @click="teamTopPerformances(menu.action)">{{menu.menu}}</div>
+                                </div>
+                                <div v-for="(stats, i) in teamPerformance" v-if="i < 5">
+                                    {{stats.player_name}}{{stats[sideBarMenuStatus]}}
+                                </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -78,10 +82,18 @@
           {menu: 'fixture', action: 'fixture'},
           {menu: 'Top performance', action: 'performance'},
         ],
+        sidebarMenuStatus: [
+          {menu: 'Top Score', action: 'player_goals'},
+          {menu: 'Most Red', action: 'player_red_cards'},
+          {menu: 'Most Yellow', action: 'player_yellow_cards'},
+        ],
         selectedMenu: 'players',
         statistics: [],
         allFixtures: [],
         teamPlayed: [],
+        teamPerformance: [],
+        openedTeamPerformance: [],
+        sideBarMenuStatus: ''
       }
     },
     components: {
@@ -111,7 +123,7 @@
           }
         }).then(response => {
           this.openedTeam = response.data
-          this.teamTopPerformances(this.openedTeam.result[0].players)
+          this.openedTeamPerformance = this.openedTeam.result[0].players
           this.teamFixtures(this.openedTeam.result[0].team_key)
 
         })
@@ -134,30 +146,14 @@
         if (this.selectedMenu === 'fixture') {
         }
       },
-      teamTopPerformances (team) {
-        let allPlayersStats = []
-        team.forEach( players => {
-          console.log(players)
-          allPlayersStats.push(players)
-
-        })
-        // this.teamTopScorer (allPlayersStats)
-        // this.teamTopRedCards (allPlayersStats)
-        // this.topYellowCards (allPlayersStats)
+      teamTopPerformances (sortBy) {
+        this.sideBarMenuStatus = sortBy
+        this.teamPerformance = this.openedTeamPerformance.sort((a, b) => (parseInt(a[sortBy]) < parseInt(b[sortBy])) ? 1 : -1)
       },
-      // teamTopScorer (goals) {
-      //   console.log(goals.player_country)
-      // },
-      // teamTopRedCards (redCards) {
-      //
-      // },
-      // topYellowCards (yellowCards) {
-      //
-      // },
       teamFixtures (teamId) {
         this.teamPlayed = []
-        this.allFixtures.forEach( item => {
-          item.forEach( fixture => {
+        this.allFixtures.forEach(item => {
+          item.forEach(fixture => {
             if (fixture.away_team_key === teamId || fixture.home_team_key === teamId) {
               this.teamPlayed.push(fixture)
             }
