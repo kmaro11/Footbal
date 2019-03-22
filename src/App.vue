@@ -44,13 +44,19 @@
                             <Fixture :teamPlayed="teamPlayed"/>
                         </div>
                         <div v-if="selectedMenu === 'performance'">
-                            <div>
-                                <div v-for="menu in sidebarMenuStatus">
-                                    <div @click="teamTopPerformances(menu.action)">{{menu.menu}}</div>
+                            <div class="flex flex">
+                                <div>
+                                    <div v-for="menu in sidebarMenuStatus" class="flex-col">
+                                        <div @click="teamTopPerformances(menu.action)">{{menu.menu}}</div>
+                                    </div>
                                 </div>
-                                <div v-for="(stats, i) in teamPerformance" v-if="i < 5">
-                                    {{stats.player_name}}{{stats[sideBarMenuStatus]}}
+                                <div>
+                                    <div v-for="(stats, i) in teamPerformance" v-if="i < 5">
+                                        <div>{{stats.player_name}}</div>
+                                        <div>{{stats[sideBarMenuStatus]}}</div>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -125,7 +131,7 @@
           this.openedTeam = response.data
           this.openedTeamPerformance = this.openedTeam.result[0].players
           this.teamFixtures(this.openedTeam.result[0].team_key)
-
+          this.teamTopPerformances ('player_goals')
         })
       },
       async loadFixtures () {
