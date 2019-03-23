@@ -1,15 +1,6 @@
 <template>
     <div id="app">
-        <nav class="h-16 bg-purple-darkest w-full  flex items-center justify-between px-4">
-            <div v-for="logos in headerTeamsLogo" class="w-10">
-                <img :src='logos.team_logo' alt="" class="w-full">
-            </div>
-        </nav>
-        <nav class="flex bg-green mb-16 pl-12">
-            <div v-for="menu in headerMenu" class="p-3 text-purple-darkest">
-                {{menu.menu}}
-            </div>
-        </nav>
+        <Header :logo="headerTeamsLogo"/>
         <div class="flex">
             <div class=" bg-purple-darkest flex flex-col p-8 mx-16">
                 <div class="flex mb-4">
@@ -85,6 +76,7 @@
     import '@/assets/css/tailwind.css'
     import TeamSquad from '@/components/TeamSquad'
     import Fixture from '@/components/Fixture'
+    import Header from '@/components/Header'
 
     export default {
         data() {
@@ -103,10 +95,7 @@
                     {menu: 'Most Red', action: 'player_red_cards'},
                     {menu: 'Most Yellow', action: 'player_yellow_cards'},
                 ],
-                headerMenu: [
-                    {menu: 'Statistic', action: 'player_goals'},
-                    {menu: 'Standing', action: 'player_red_cards'},
-                ],
+
                 selectedMenu: 'players',
                 statistics: [],
                 allFixtures: [],
@@ -120,7 +109,8 @@
         },
         components: {
             TeamSquad,
-            Fixture
+            Fixture,
+            Header,
         },
         computed: {},
         methods: {
