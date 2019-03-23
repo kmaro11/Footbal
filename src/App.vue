@@ -1,8 +1,13 @@
 <template>
     <div id="app">
-        <nav class="h-16 bg-purple-darkest w-full mb-16 flex items-center justify-between px-4">
+        <nav class="h-16 bg-purple-darkest w-full  flex items-center justify-between px-4">
             <div v-for="logos in headerTeamsLogo" class="w-10">
                 <img :src='logos.team_logo' alt="" class="w-full">
+            </div>
+        </nav>
+        <nav class="flex bg-green mb-16 pl-12">
+            <div v-for="menu in headerMenu" class="p-3 text-purple-darkest">
+                {{menu.menu}}
             </div>
         </nav>
         <div class="flex">
@@ -97,6 +102,10 @@
                     {menu: 'Top Score', action: 'player_goals'},
                     {menu: 'Most Red', action: 'player_red_cards'},
                     {menu: 'Most Yellow', action: 'player_yellow_cards'},
+                ],
+                headerMenu: [
+                    {menu: 'Statistic', action: 'player_goals'},
+                    {menu: 'Standing', action: 'player_red_cards'},
                 ],
                 selectedMenu: 'players',
                 statistics: [],
