@@ -2,22 +2,7 @@
     <div id="app">
         <Header :logo="headerTeamsLogo"/>
         <div class="flex">
-            <div class=" bg-purple-darkest flex flex-col p-8 mx-16">
-                <div class="flex mb-4">
-                    <span class="text-white w-10 mr-1">Pos</span>
-                    <span class="text-white w-32 mr-2">Club</span>
-                    <span class="text-white w-10">Pts</span>
-                </div>
-                <div v-for="item in sport">
-                    <ul v-for="team in item.total" class="list-reset flex flex-col">
-                        <li @click="showTeamInfo(team.team_key)" class="text-white w-full pt-2 pb-2">
-                            <a class="w-full flex"><span class="w-10 mr-1">{{team.standing_place}}.</span><span
-                                    class="w-32 mr-2">{{team.standing_team}}</span><span
-                                    class="w-10">{{team.standing_PTS}}</span></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <StandingTable :sport="sport" v-on:changeTeam="showTeamInfo($event)"/>
             <div class="bg-red-prime mx-10 max-w-lg w-full p-6">
                 <div v-for="team in openedTeam.result" class="w-full ml-auto">
                     <div class="flex items-center flex-col justify-center relative mb-10">
@@ -32,7 +17,6 @@
                         </a>
                     </div>
                     <div>
-
                         <div v-if="selectedMenu === 'players'">
                             <TeamSquad :team="team"/>
                         </div>
@@ -40,25 +24,7 @@
                             <Fixture :teamPlayed="teamPlayed"/>
                         </div>
                         <div v-if="selectedMenu === 'performance'">
-                            <div class="flex flex">
-                                <div>
-                                    <div v-for="menu in sidebarMenuStatus" class="flex-col">
-                                        <div
-                                                @click="teamTopPerformances(menu.action)"
-                                                class="p-4 bg-purple-darkest text-white my-2 text-center hover:bg-green">
-                                            {{menu.menu}}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="w-64 border-purple-darkest border-solid border mx-auto my-0">
-                                    <div v-for="(stats, i) in teamPerformance"
-                                         v-if="i < 5"
-                                         class="text-white flex justify-between">
-                                        <div class="p-3">{{stats.player_name}}</div>
-                                        <div class="p-3">{{stats[sideBarMenuStatus]}}</div>
-                                    </div>
-                                </div>
-                            </div>
+                            <TeamTopPerformance :openedTeamPerformance="openedTeamPerformance"/>
                         </div>
                     </div>
                 </div>
@@ -77,6 +43,8 @@
     import TeamSquad from '@/components/TeamSquad'
     import Fixture from '@/components/Fixture'
     import Header from '@/components/Header'
+    import TeamTopPerformance from '@/components/TeamTopPerformance';
+    import StandingTable from "./components/StandingTable";
 
     export default {
         data() {
@@ -90,24 +58,17 @@
                     {menu: 'fixture', action: 'fixture'},
                     {menu: 'Top performance', action: 'performance'},
                 ],
-                sidebarMenuStatus: [
-                    {menu: 'Top Score', action: 'player_goals'},
-                    {menu: 'Most Red', action: 'player_red_cards'},
-                    {menu: 'Most Yellow', action: 'player_yellow_cards'},
-                ],
-
                 selectedMenu: 'players',
                 statistics: [],
                 allFixtures: [],
                 teamPlayed: [],
-                teamPerformance: [],
                 openedTeamPerformance: [],
-                sideBarMenuStatus: '',
                 headerTeamsLogo: []
-
             }
         },
         components: {
+            StandingTable,
+            TeamTopPerformance,
             TeamSquad,
             Fixture,
             Header,
@@ -147,7 +108,6 @@
                     this.openedTeam = response.data
                     this.openedTeamPerformance = this.openedTeam.result[0].players
                     this.teamFixtures(this.openedTeam.result[0].team_key)
-                    this.teamTopPerformances('player_goals')
                 })
             },
             async loadFixtures() {
@@ -168,10 +128,7 @@
                 if (this.selectedMenu === 'fixture') {
                 }
             },
-            teamTopPerformances(sortBy) {
-                this.sideBarMenuStatus = sortBy
-                this.teamPerformance = this.openedTeamPerformance.sort((a, b) => (parseInt(a[sortBy]) < parseInt(b[sortBy])) ? 1 : -1)
-            },
+
             teamFixtures(teamId) {
                 this.teamPlayed = []
                 this.allFixtures.forEach(item => {
