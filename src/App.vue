@@ -30,12 +30,7 @@
                 </div>
             </div>
         </div>
-
-        <!--<teamSquad/>-->
-        <!--<router-link to="/">Home</router-link> |-->
-        <!--<router-link to="/about">About</router-link>-->
     </div>
-    <!--<router-view/>-->
 </template>
 <script>
     import axios from 'axios';
@@ -44,7 +39,7 @@
     import Fixture from '@/components/Fixture'
     import Header from '@/components/Header'
     import TeamTopPerformance from '@/components/TeamTopPerformance';
-    import StandingTable from "./components/StandingTable";
+    import StandingTable from '@/components/StandingTable';
 
     export default {
         data() {
