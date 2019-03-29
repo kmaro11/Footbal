@@ -44,7 +44,7 @@
     export default {
         data() {
             return {
-                sport: [],
+                sport: {},
                 apiKey: '5b6339a51368e998ca64d8eea1032bd7fe1095678c5e49ae41c19247e9893548',
                 openedTeam: [],
                 allTeams: [],
